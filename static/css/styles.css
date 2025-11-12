@@ -1,0 +1,64 @@
+body, html{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(228, 237, 240);
+}
+
+/* Navigation Bar Styles */
+.navBar {
+    background-color: #fdb87f;
+    color: white;
+    padding: 5px;
+    border-bottom: 1px solid #c06a48;
+}
+.navBarTitle{
+    flex-grow: 1;
+}
+.navBarTitle a {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    line-height: 80px;
+    font-size: xx-large;
+    font-weight: 700;
+}
+.navBarTitle a:hover {
+    color: #f3f3f3;
+    transition: ease-in-out 0.15s;
+}
+.navBarLinks{
+    justify-content: end;
+}
+.navBarLinks nav {
+  display: flex;
+  gap: 1rem;
+}
+.navBarLinks a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 80px;
+}
+.navBarLinks a:hover {
+    color: #f3f3f3;
+    transition: ease-in-out 0.15s;
+}
+/* End Of Navigation Bar Styles */
+
+
+
+
+
+/* styles based on bootstrap */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+.d-flex {
+    display: flex;
+}
+.justify-content-center {
+    justify-content: center;
+}
+/* End of bootstrap copy styles */

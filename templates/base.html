@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overtime Watcher</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header class="navBar">
+    <div class="container d-flex">
+        <div class="navBarTitle">
+            <a href="{% url 'home' %}" style="text-decoration: none;">Overtime Watcher</a>
+        </div>
+        <div class="navBarLinks">
+            <nav>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="#">Log-in</a>
+            </nav>
+        </div>
+    </div>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+        <div style=" display: flex; height: 100vh;">
+            <div style="flex-grow: 1;">
+            </div>
+        </div>
+    </main>
+
+    <footer class="navBar">
+    <div class="container d-flex">
+            <div class="navBarTitle">
+                <p>2025 Overtime Watcher</p>
+            </div>
+    </div>
+    </footer>
+</body>
+</html>
