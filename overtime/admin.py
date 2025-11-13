@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Team, Membership
+from .models import Team, Membership, Profile
 
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
@@ -25,3 +25,9 @@ class MembershipAdmin(admin.ModelAdmin):
         return obj.is_over_awake_limit()
     is_over_awake_limit.boolean = True
     is_over_awake_limit.short_description = 'Over limit'
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'timezone', 'wake_time')
+    search_fields = ('user__username', 'user__email', 'timezone')

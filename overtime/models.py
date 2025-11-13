@@ -5,6 +5,9 @@ import secrets
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 User = settings.AUTH_USER_MODEL
 
@@ -130,3 +133,26 @@ class Membership(models.Model):
 
     def is_over_awake_limit(self, at_time=None):
         return self.awake_seconds(at_time=at_time) >= MAX_AWAKE_SECONDS
+
+
+class Profile(models.Model):
+    """Per-user preferences persisted across sessions.
+
+    We store the user's preferred IANA timezone here so their selection
+    survives session clears and browser storage resets. Wake time is
+    intentionally not persisted here per user's previous request.
+    """
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    timezone = models.CharField(max_length=64, blank=True, null=True, help_text='IANA timezone name, e.g. America/Los_Angeles')
+    # optional persisted account-level wake time; useful as a fallback for new memberships
+    wake_time = models.DateTimeField(null=True, blank=True, help_text='Optional account-level wake time (stored in user timezone)')
+
+    def __str__(self):
+        return f'Profile for {self.user}'
+
+
+# Ensure a Profile exists for each new user
+@receiver(post_save, sender=get_user_model())
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)

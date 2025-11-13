@@ -45,3 +45,40 @@ async function setWakeNow(teamId) {
 
 // expose to global for inline onclick handlers
 window.setWakeNow = setWakeNow;
+
+// Live awake timers: find all elements with data-wake and update every second.
+(() => {
+    const MAX_AWAKE_SECONDS = 17 * 3600; // cap at 17 hours
+    // select all elements that have a data-wake attribute (team displays and member spans)
+    const elements = Array.from(document.querySelectorAll('[data-wake]'))
+        .map(el => ({ el, wake: el.getAttribute('data-wake') }))
+        .filter(o => o.wake && o.wake.trim() !== '');
+
+    if (!elements.length) return;
+
+    function updateOnce() {
+        const now = new Date();
+        elements.forEach(({ el, wake }) => {
+            try {
+                const wakeDate = new Date(wake);
+                if (isNaN(wakeDate)) return;
+                let secs = Math.floor((now - wakeDate) / 1000);
+                if (secs < 0) secs = 0;
+                if (secs > MAX_AWAKE_SECONDS) secs = MAX_AWAKE_SECONDS;
+                const hours = (secs / 3600);
+                // display with two decimal places
+                el.textContent = hours.toFixed(2) + ' h';
+                // add warning class if over limit
+                if (secs >= MAX_AWAKE_SECONDS) el.classList.add('warning'); else el.classList.remove('warning');
+            } catch (e) {
+                // ignore
+            }
+        });
+    }
+
+    // initial update
+    updateOnce();
+    // update every 30 seconds for smoothness (no need to update every second)
+    setInterval(updateOnce, 30 * 1000);
+})();
+

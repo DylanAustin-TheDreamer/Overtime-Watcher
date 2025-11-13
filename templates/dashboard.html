@@ -5,6 +5,25 @@
 <div class="container">
     <h1>Dashboard</h1>
     <p>Welcome to your dashboard, {{ user.username }}!</p>
+    <div style="margin-bottom:1rem;">
+        <form method="post" action="{% url 'force_model_save_wake_time' %}" style="display:flex;align-items:center;gap:8px;">
+            {% csrf_token %}
+            <label for="tz-select">Your timezone</label>
+            <select id="tz-select" name="timezone" class="form-control">
+                {% for value, label in timezone_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+            <label for="wake-account" style="margin-left:8px;">Wake time</label>
+            <input id="wake-account" name="wake_time" type="datetime-local" />
+            <button type="submit" class="btn">Save</button>
+        </form>
+    </div>
+    <div>
+        {# Profile form already exists above; include wake_time input there instead. Show current account wake-time here if set in session/profile #}
+        {% comment %}Account-level wake time is handled in the profile_update form above.{% endcomment %}
+        <div>My awake (account): {% if request.session.user_wake_time %}{{ request.session.user_wake_time }}{% else %}Not set{% endif %}</div>
+    </div>
     {% if messages %}
     <div class="mb-3">
         <ul class="messages">
@@ -75,26 +94,18 @@
                         <div style="margin-top:6px; font-size:0.95rem;">Join code: <strong>{{ team.join_code }}</strong></div>
                     {% endif %}
                 {% endfor %}
-                <div>
-                    <button id="wake-btn-{{ team.id }}" class="btn" onclick="setWakeNow('{{ team.id }}')">I woke up now</button>
-                    <div>My awake: <span id="awake-display-{{ team.id }}">{% for m in team.memberships.all %}{% if m.user == user %}{{ m.awake_hours }} h{% endif %}{% endfor %}</span></div>
-                </div>
 
                 <h4 class="mt-2">Members</h4>
                 <ul class="members-list">
                     {% for m in team.memberships.all %}
                     <li>
                         <strong>{{ m.user.username }}</strong>
-                        - <span class="awake-value {% if m.is_over_awake_limit %}warning{% endif %}">{{ m.awake_hours }} h</span>
+                        - <span class="awake-value {% if m.is_over_awake_limit %}warning{% endif %}" data-wake="{% if m.wake_time %}{{ m.wake_time|date:'c' }}{% endif %}">{{ m.awake_hours }} h</span>
                         {% if m.is_over_awake_limit %}<span class="badge warning">Over limit</span>{% endif %}
                     </li>
-                    {% empty %}
-                    <li>No members yet.</li>
                     {% endfor %}
-                </ul>
             </div>
             {% endfor %}
-        </div>
         {% endif %}
         </div>
     </div>
