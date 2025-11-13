@@ -43,7 +43,16 @@ body, html{
     color: #f3f3f3;
     transition: ease-in-out 0.15s;
 }
+
+.dropdownNav {
+        visibility: hidden;
+        flex-direction: column;
+        transition: ease-in-out 0.35s;
+        max-height: 0;
+    }
 /* End Of Navigation Bar Styles */
+
+/* Button Styles */
 .btn{
     background-color: #fdb87f;
     color: white;
@@ -57,10 +66,24 @@ body, html{
     background-color: #e5946a;
     transition: ease-in-out 0.15s;
 }
+/* For styling background forms on allauth */
+form {
+    width: 450px;
+    gap: 5px;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+/* ---------------------------------------- */
 
 
-
-
+/* ---------------------------------------- */
 /* styles based on bootstrap */
 .container {
     max-width: 1000px;
@@ -76,9 +99,30 @@ body, html{
 .mt-4 {
     margin-top: 2rem;
 }
+.mt-2 {
+    margin-top: 0.5rem;
+}
 .flex-column {
     flex-direction: column;
 }
+.navbar-toggler {
+    display: none;
+    border: none;
+    background-color: transparent;
+    line-height: 80px;
+}
+.navbar-toggler-icon {
+    font-size: 1.5rem;
+    color: white;
+}
+.navbar-toggler-icon:hover {
+    color: #f3f3f3;
+    transition: ease-in-out 0.15s;
+}
+/* End of bootstrap copy styles */
+/* ---------------------------------------- */
+
+
 /* Dashboard card styles: use a class instead of inline styles for consistent sizing */
 .dashboard-card {
     box-sizing: border-box; /* include border/padding in width/height calculations */
@@ -103,7 +147,7 @@ body, html{
 }
 
 /* Responsive: stack cards on narrow screens */
-@media (max-width: 600px) {
+@media (max-width: 630px) {
     .dashboard-row {
         flex-direction: column;
         align-items: center;
@@ -114,5 +158,53 @@ body, html{
         height: auto;    /* let content determine height */
         padding: 1.25rem; /* smaller padding on mobile */
     }
+    #nav {
+        display: none;
+    }
+    .dropdownNav {
+        visibility: hidden;
+        flex-direction: column;
+        transition: ease-in-out 0.35s;
+        max-height: 0;
+    }
+    .dropdownNav-show {
+        visibility: visible;
+        flex-direction: column;
+        transition: ease-in-out 0.35s;
+        max-height: 600px;
+    }
+    .dropdownNav a{
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        line-height: 40px;
+    }
+    .navbar-toggler {
+        display: block;
+    }
+    .navBarTitle a {
+        font-size: x-large;
+    }
 }
-/* End of bootstrap copy styles */
+
+.members-list {
+    list-style: none;
+    padding-left: 0;
+}
+.members-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.awake-value.warning,
+.badge.warning {
+    color: #a80000;
+    background-color: #ffd6d6;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+.badge {
+    display: inline-block;
+    font-size: 12px;
+    margin-left: 6px;
+}
+
