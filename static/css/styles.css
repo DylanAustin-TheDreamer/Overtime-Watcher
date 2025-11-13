@@ -146,6 +146,19 @@ input[type="password"] {
     align-items: stretch; /* make children stretch to same height if height not fixed */
 }
 
+
+/* for contact page */
+#socials a {
+    text-decoration: none;
+    color: #333;
+    font-size: 2rem;
+    margin-right: 15px;
+}
+#socials a:hover {
+    color: #777;
+    transition: ease-in-out 0.2s;
+}
+
 /* Responsive: stack cards on narrow screens */
 @media (max-width: 630px) {
     .dashboard-row {

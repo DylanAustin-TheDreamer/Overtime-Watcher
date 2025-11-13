@@ -9,4 +9,5 @@ urlpatterns = [
     path('signout/', views.signout, name='signout'),
     path('teams/<uuid:team_id>/set-wake/', views.set_wake_time, name='set_wake_time'),
     path('teams/join/', views.join_team, name='join_team'),
+    path('contact/', views.contact, name='contact'),
 ]

@@ -12,6 +12,9 @@ import json
 def home(request):
     return render(request, 'home.html')
 
+def contact(request):
+    return render(request, 'contact.html')
+
 
 def dashboard(request):
     # Show teams the current user belongs to and their memberships
