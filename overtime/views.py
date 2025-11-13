@@ -1,8 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_datetime
 from django.utils import timezone
 from django.http import JsonResponse
+from django.contrib import messages
 import json
 
 # Create your views here.
@@ -18,6 +21,57 @@ def dashboard(request):
     else:
         teams = []
     return render(request, 'dashboard.html', { 'teams': teams })
+
+@login_required
+def join_team(request):
+    """Handle dashboard team-joining form POST.
+    Expects `join_code` in POST. Joins the Team if found.
+    Redirects back to the dashboard.
+    """
+    from .models import Team
+
+    if request.method != 'POST':
+        return redirect('dashboard')
+
+    join_code = (request.POST.get('join_code'))
+    if not join_code:
+        # nothing provided, just go back
+        return redirect('dashboard')
+
+    try:
+        team = Team.objects.get(join_code=join_code)
+    except Team.DoesNotExist:
+        messages.error(request, 'No team found with that join code.')
+        return redirect('dashboard')
+
+    membership, created = team.add_member(request.user, is_admin=False)
+    created = True
+    membership.save()
+    # Redirect with a small query hint so the dashboard can show the joined team even
+    # if the messages framework isn't installed/visible.
+    return redirect(f"{reverse('dashboard')}?joined={team.join_code}")
+
+@login_required
+def create_team(request):
+    """Handle dashboard team-creation form POST.
+    Expects `name` in POST. Creates a Team and adds the creator as an admin member.
+    Redirects back to the dashboard.
+    """
+    from .models import Team
+
+    if request.method != 'POST':
+        return redirect('dashboard')
+
+    name = (request.POST.get('name') or '').strip()
+    if not name:
+        # nothing provided, just go back
+        return redirect('dashboard')
+
+    team = Team(name=name, created_by=request.user)
+    team.save()
+    # add creator as admin
+    team.add_member(request.user, is_admin=True)
+    return redirect(f"{reverse('dashboard')}?joined={team.join_code}")
 
 
 def signout(request):
@@ -62,7 +116,3 @@ def set_wake_time(request, team_id):
         'over_limit': membership.is_over_awake_limit(),
     })
 
-@login_required
-def create_team(request):
-    """--- IGNORE ---"""
-    pass

@@ -5,6 +5,20 @@
 <div class="container">
     <h1>Dashboard</h1>
     <p>Welcome to your dashboard, {{ user.username }}!</p>
+    {% if messages %}
+    <div class="mb-3">
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="message {{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% if request.GET.joined %}
+    <div class="mb-3">
+        <div class="message success">Joined team with code: <strong>{{ request.GET.joined }}</strong></div>
+    </div>
+    {% endif %}
     <div class="mt-4">
         <div class="dashboard-row">
             <div class="dashboard-card">
@@ -18,26 +32,50 @@
             </div>
         </div>
     <div class="mt-4">
+        <div class="dashboard-row" style="justify-content: start;">
+            <div>
             <h2>Make a Team</h2>
             <div class="dashboard-card">
                 <form method="post" action="{% url 'create_team' %}">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="team-name" class="form-label">Team Name</label>
-                        <input type="text" class="form-control" id="team-name" name="team_name" required>
+                        <input type="text" class="form-control" id="team-name" name="name" required>
                     </div>
                     <button type="submit" class="btn">Create Team</button>
                 </form>
             </div>
+            </div>
+            <div>
+                <h2>Join a Team</h2>
+            <div class="dashboard-card">
+                <form method="post" action="{% url 'join_team' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="team-code" class="form-label">Team Code</label>
+                        <input type="text" class="form-control" id="team-code" name="join_code" required>
+                    </div>
+                    <button type="submit" class="btn">Join Team</button>
+                </form>
+            </div>
+            </div>
         </div>
+    </div>
 
         {% if teams %}
         <div class="mt-3">
             <h2>Your Teams</h2>
+            <div class="dashboard-row" style="flex-wrap: wrap; gap: 20px; justify-content: start;">
             {% for team in teams %}
-            <div class="dashboard-card" id="team-{{ team.id }}">
+            <div class="dashboard-card d-flex" id="team-{{ team.id }}" style="flex-direction: column; height: fit-content;">
                 <h3>{{ team.name }}</h3>
-                <div style="display:flex;align-items:center;gap:1rem;">
+                {% comment %}If you're the creator or an admin for this team, show the join code for convenience.{% endcomment %}
+                {% for m in team.memberships.all %}
+                    {% if m.user == user and m.is_admin %}
+                        <div style="margin-top:6px; font-size:0.95rem;">Join code: <strong>{{ team.join_code }}</strong></div>
+                    {% endif %}
+                {% endfor %}
+                <div>
                     <button id="wake-btn-{{ team.id }}" class="btn" onclick="setWakeNow('{{ team.id }}')">I woke up now</button>
                     <div>My awake: <span id="awake-display-{{ team.id }}">{% for m in team.memberships.all %}{% if m.user == user %}{{ m.awake_hours }} h{% endif %}{% endfor %}</span></div>
                 </div>
