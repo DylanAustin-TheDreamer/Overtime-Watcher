@@ -6,3 +6,6 @@ def home(request):
 
 def dashboard(request):
     return render(request, 'dashboard.html')
+
+def signout(request):
+    return render(request, 'account/signout.html')
