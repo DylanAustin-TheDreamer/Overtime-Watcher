@@ -73,4 +73,42 @@ body, html{
 .justify-content-center {
     justify-content: center;
 }
+.mt-4 {
+    margin-top: 2rem;
+}
+.flex-column {
+    flex-direction: column;
+}
+/* Dashboard card styles: use a class instead of inline styles for consistent sizing */
+.dashboard-card {
+    box-sizing: border-box; /* include border/padding in width/height calculations */
+    border: 1px solid #333;
+    padding: 50px;
+    text-align: center;
+    width: 350px; /* fixed width so all cards match */
+    height: 150px; /* fixed height for consistent boxes */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dashboard-row {
+    gap: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: stretch; /* make children stretch to same height if height not fixed */
+}
+
+/* Responsive: stack cards on narrow screens */
+@media (max-width: 600px) {
+    .dashboard-row {
+        flex-direction: column;
+        align-items: center;
+    }
+    .dashboard-card {
+        width: 90%;      /* nearly full-width on small screens */
+        max-width: 420px;
+        height: auto;    /* let content determine height */
+        padding: 1.25rem; /* smaller padding on mobile */
+    }
+}
 /* End of bootstrap copy styles */
