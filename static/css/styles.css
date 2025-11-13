@@ -91,6 +91,10 @@ body, html{
     align-items: center;
     justify-content: center;
 }
+.dashboard-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    transition: box-shadow 0.05s ease-in-out;
+}
 .dashboard-row {
     gap: 50px;
     display: flex;
