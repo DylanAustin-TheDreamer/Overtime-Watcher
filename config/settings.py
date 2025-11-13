@@ -143,3 +143,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Required by django-allauth
 SITE_ID = 1
+LOGIN_REDIRECT_URL = '/dashboard/'
