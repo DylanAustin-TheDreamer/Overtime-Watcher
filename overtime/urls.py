@@ -5,12 +5,9 @@ from overtime import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('teams/create/', views.create_team, name='create_team'),
     path('signout/', views.signout, name='signout'),
-    path('teams/<uuid:team_id>/set-wake/', views.set_wake_time, name='set_wake_time'),
-    path('teams/join/', views.join_team, name='join_team'),
     path('contact/', views.contact, name='contact'),
-    path('profile/update/', views.profile_update, name='profile_update'),
-    path('teams/<uuid:team_id>/set-wake/form/', views.set_wake_time_form, name='set_wake_time_form'),
-    path('time/', views.force_model_save_wake_time, name='force_model_save_wake_time'),
+    path('teams/create/', views.create_team, name='create_team'),
+    path('teams/join/', views.join_team, name='join_team'),
+    path('update-time/', views.update_time, name='update_time'),
 ]
