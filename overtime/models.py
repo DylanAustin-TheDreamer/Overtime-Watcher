@@ -32,17 +32,3 @@ class Membership(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='memberships')
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='memberships')
     joined_at = models.DateTimeField(auto_now_add=True)
-
-class Timezones():
-    """Return a list of (zone_name, label) pairs sorted by offset then name."""
-
-    # Predefined GMT timezones
-    zones_byGMT = {'GMT+0': 0, 'GMT+1': 1, 'GMT+2': 2,
-             'GMT+3': 3, 'GMT+4': 4, 'GMT+5': 5,
-             'GMT+6': 6, 'GMT+7': 7, 'GMT+8': 8,
-             'GMT+9': 9, 'GMT+10': 10, 'GMT+11': 11,
-             'GMT+12': 12, 'GMT-1': -1, 'GMT-2': -2,
-             'GMT-3': -3, 'GMT-4': -4, 'GMT-5': -5,
-             'GMT-6': -6, 'GMT-7': -7, 'GMT-8': -8,
-             'GMT-9': -9, 'GMT-10': -10, 'GMT-11': -11,
-             'GMT-12': -12}

@@ -65,5 +65,17 @@ def dashboard(request):
     # Show teams the current user belongs to and their memberships
     if request.user.is_authenticated:
         teams = Team.objects.filter(memberships__user=request.user).distinct()
-    return render(request, 'dashboard.html', {'teams': teams})
+
+    # create a dict to hold timezone info for selector options. Then pass to template.
+    zones_byGMT = {'GMT+0': 0, 'GMT+1': 1, 'GMT+2': 2,
+             'GMT+3': 3, 'GMT+4': 4, 'GMT+5': 5,
+             'GMT+6': 6, 'GMT+7': 7, 'GMT+8': 8,
+             'GMT+9': 9, 'GMT+10': 10, 'GMT+11': 11,
+             'GMT+12': 12, 'GMT-1': -1, 'GMT-2': -2,
+             'GMT-3': -3, 'GMT-4': -4, 'GMT-5': -5,
+             'GMT-6': -6, 'GMT-7': -7, 'GMT-8': -8,
+             'GMT-9': -9, 'GMT-10': -10, 'GMT-11': -11,
+             'GMT-12': -12}
+    
+    return render(request, 'dashboard.html', {'teams': teams, 'zones_byGMT': zones_byGMT})
 

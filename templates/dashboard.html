@@ -10,12 +10,12 @@
             {% csrf_token %}
             <label for="tz-select">Your timezone</label>
             <select id="tz-select" name="timezone" class="form-control">
-                {% for value, label in Timezones.zones_byGMT.items %}
+                {% for label, value in zones_byGMT.items %}
                 <option value="{{ value }}">{{ label }}</option>
                 {% endfor %}
             </select>
             <label for="wake-account" style="margin-left:8px;">Wake time</label>
-            <input id="wake-account" name="wake_time" type="datetime-local" />
+            <input id="wake-account" name="wake_time" type="time" />
             <button type="submit" class="btn">Save</button>
         </form>
     </div>
