@@ -23,7 +23,11 @@
     <div style="background-color: rgba(0, 0, 0, 0.1); padding: 8px;">
         <p>Your current timezone: {{ user.profile.timezone|default:"Not set" }}</p>
         <p>Your current wake time: {{ user.profile.wake_time|default:"Not set" }}</p>
-        <p>You've been awake: <span id="warning">{{ user.profile.get_awake_duration|default:"—" }}</span></p>
+        <p>You've been awake: <span id="warning" 
+            {% if user.profile.wake_time and user.profile.timezone %}
+            data-wake-time="{{ user.profile.wake_time|date:'H:i' }}" 
+            data-timezone-offset="{{ user.profile.timezone|slice:'3:' }}"
+            {% endif %}>{{ user.profile.get_awake_duration|default:"—" }}</span></p>
     </div>
     {% endif %}
 
@@ -70,7 +74,9 @@
                     <li>
                         <strong>{{ m.user.username }}</strong>
                         {% if m.user.profile.wake_time and m.user.profile.timezone %}
-                        - <span id="warning">{{ m.user.profile.get_awake_duration }}</span> ({{ m.user.profile.timezone }})
+                        - <span id="warning" 
+                            data-wake-time="{{ m.user.profile.wake_time|date:'H:i' }}" 
+                            data-timezone-offset="{{ m.user.profile.timezone|slice:'3:' }}">{{ m.user.profile.get_awake_duration }}</span> ({{ m.user.profile.timezone }})
                       
                         {% else %}
                         - <em>No wake time set</em>
