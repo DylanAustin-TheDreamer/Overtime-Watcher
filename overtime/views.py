@@ -1,12 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.dateparse import parse_datetime
-from django.http import JsonResponse
-from django.contrib import messages
-import json
 from zoneinfo import ZoneInfo
-from django.apps import apps
-from .models import Team
+from overtime.models import Team, Profile
+from datetime import timedelta, datetime
+from django.utils import timezone
 
 # Create your views here.
 def home(request):
@@ -25,18 +23,6 @@ def signout(request):
     return render(request, 'signout.html')
 
 @login_required
-def update_time(request):
-    """View to update user's timezone and wake time from dashboard form."""
-
-    return render(request, 'dashboard.html')
-
-@login_required
-def create_team(request):
-    """View to create a new team."""
-
-    return render(request, 'dashboard.html')
-
-@login_required
 def join_team(request):
     """View to join a team using a join code."""
 
@@ -46,16 +32,37 @@ def join_team(request):
 
 
 
+# currently working with
+@login_required
+def create_team(request):
+    """View to create a new team."""
+
+    return render(request, 'dashboard.html')
 
 
 
 
 
 
-
-
-
-
+# works - Completed
+@login_required
+def update_time(request):
+    if request.method == 'POST':
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        timezone_val = request.POST.get('timezone')
+        wake_time_val = request.POST.get('wake_time')
+        
+        if timezone_val:
+            # Convert number to GMT format: "5" -> "GMT+5", "-3" -> "GMT-3"
+            tz_num = int(timezone_val)
+            profile.timezone = f"GMT{'+' if tz_num >= 0 else ''}{tz_num}"
+        if wake_time_val:
+            # Convert "HH:MM" string to time object for TimeField
+            profile.wake_time = datetime.strptime(wake_time_val, "%H:%M").time()
+        
+        profile.save()
+    
+    return redirect('dashboard')
 
 # Works - Completed
 @login_required
@@ -64,7 +71,7 @@ def dashboard(request):
 
     # Show teams the current user belongs to and their memberships
     if request.user.is_authenticated:
-        teams = Team.objects.filter(memberships__user=request.user).distinct()
+        teams = Team.objects.filter(memberships__user=request.user).distinct() 
 
     # create a dict to hold timezone info for selector options. Then pass to template.
     zones_byGMT = {'GMT+0': 0, 'GMT+1': 1, 'GMT+2': 2,
@@ -77,5 +84,4 @@ def dashboard(request):
              'GMT-9': -9, 'GMT-10': -10, 'GMT-11': -11,
              'GMT-12': -12}
     
-    return render(request, 'dashboard.html', {'teams': teams, 'zones_byGMT': zones_byGMT})
-
+    return render(request, 'dashboard.html', {'teams': teams, 'zones_byGMT': zones_byGMT,})

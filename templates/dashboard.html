@@ -15,10 +15,17 @@
                 {% endfor %}
             </select>
             <label for="wake-account" style="margin-left:8px;">Wake time</label>
-            <input id="wake-account" name="wake_time" type="time" />
+            <input id="wake-account" name="wake_time" type="time"/>
             <button type="submit" class="btn">Save</button>
         </form>
     </div>
+    {% if user.profile %}
+    <div style="background-color: rgba(0, 0, 0, 0.1); padding: 8px;">
+        <p>Your current timezone: {{ user.profile.timezone|default:"Not set" }}</p>
+        <p>Your current wake time: {{ user.profile.wake_time|default:"Not set" }}</p>
+        <p>You've been awake: {{ user.profile.get_awake_duration|default:"—" }}</p>
+    </div>
+    {% endif %}
 
     {% if messages %}
     <div class="mb-3">
@@ -54,20 +61,20 @@
             {% for team in teams %}
             <div class="dashboard-card d-flex" id="team-{{ team.id }}" style="flex-direction: column; height: auto; width: fit-content; padding: 62.5px; ">
                 <h3>{{ team.name }}</h3>
-                {% comment %}If you're the creator or an admin for this team, show the join code for convenience.{% endcomment %}
-                {% for m in team.memberships.all %}
-                    {% if m.user == user and m.is_admin %}
-                        <div style="margin-top:6px; font-size:0.95rem;">Join code: <strong>{{ team.join_code }}</strong></div>
-                    {% endif %}
-                {% endfor %}
-
+                {% if team.created_by == user %}
+                    <div style="margin-top:6px; font-size:0.95rem;">Join code: <strong>{{ team.join_code }}</strong></div>
+                {% endif %}
                 <h4 class="mt-2">Members</h4>
                 <ul class="members-list">
                     {% for m in team.memberships.all %}
                     <li>
                         <strong>{{ m.user.username }}</strong>
-                        - <span class="awake-value {% if m.is_over_awake_limit %}warning{% endif %}" data-wake="{% if m.wake_time %}{{ m.wake_time|date:'c' }}{% endif %}">{{ m.awake_hours }} h</span>
-                        {% if m.is_over_awake_limit %}<span class="badge warning">Over limit</span>{% endif %}
+                        {% if m.user.profile.wake_time and m.user.profile.timezone %}
+                        - Wake: {{ m.user.profile.get_awake_duration }} ({{ m.user.profile.timezone }})
+                      
+                        {% else %}
+                        - <em>No wake time set</em>
+                        {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
