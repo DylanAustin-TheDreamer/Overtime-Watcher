@@ -22,31 +22,9 @@ def signout(request):
 
     return render(request, 'account/signout.html')
 
-@login_required
-def join_team(request):
-    """View to join a team using a join code."""
-
-    if request.method == 'POST':
-        join_code = request.POST.get('join_code', '').strip().upper()
-        try:
-            team = Team.objects.get(join_code=join_code)
-            team.members.add(request.user)
-            team.save()
-            return redirect('dashboard')
-        except Team.DoesNotExist:
-            pass  # Optionally handle invalid join code here
-    return render(request, 'dashboard.html')
 
 
 
-
-
-# currently working with
-@login_required
-def create_team(request):
-    """View to create a new team."""
-
-    return render(request, 'dashboard.html')
 
 
 
@@ -94,3 +72,35 @@ def dashboard(request):
              'GMT-12': -12}
     
     return render(request, 'dashboard.html', {'teams': teams, 'zones_byGMT': zones_byGMT,})
+
+# works - Completed
+@login_required
+def create_team(request):
+    """View to create a new team."""
+    if request.method == 'POST':
+        team_name = request.POST.get('name', '').strip()
+        if team_name:
+            team = Team.objects.create(
+                name=team_name,
+                created_by=request.user
+            )
+            team.members.add(request.user)
+            team.save()
+            return redirect('dashboard')
+    return render(request, 'dashboard.html')
+
+# works - Completed
+@login_required
+def join_team(request):
+    """View to join a team using a join code."""
+
+    if request.method == 'POST':
+        join_code = request.POST.get('join_code', '').strip().upper()
+        try:
+            team = Team.objects.get(join_code=join_code)
+            team.members.add(request.user)
+            team.save()
+            return redirect('dashboard')
+        except Team.DoesNotExist:
+            pass  # Optionally handle invalid join code here
+    return render(request, 'dashboard.html')

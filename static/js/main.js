@@ -57,6 +57,12 @@ function updateAllDurations() {
         if (wakeTime && !isNaN(timezoneOffset)) {
             const duration = calculateAwakeDuration(wakeTime, timezoneOffset);
             element.textContent = duration;
+            if (parseFloat(duration) >= 16 && parseFloat(duration) < 17){
+                element.style.color = "#c48600ff";
+            }
+            else if (parseFloat(duration) >= 17){
+                element.style.color = "#b60000ff";
+            }
         }
     });
 }
