@@ -20,12 +20,21 @@ def contact(request):
 def signout(request):
     """Sign out page view."""
 
-    return render(request, 'signout.html')
+    return render(request, 'account/signout.html')
 
 @login_required
 def join_team(request):
     """View to join a team using a join code."""
 
+    if request.method == 'POST':
+        join_code = request.POST.get('join_code', '').strip().upper()
+        try:
+            team = Team.objects.get(join_code=join_code)
+            team.members.add(request.user)
+            team.save()
+            return redirect('dashboard')
+        except Team.DoesNotExist:
+            pass  # Optionally handle invalid join code here
     return render(request, 'dashboard.html')
 
 

@@ -31,6 +31,7 @@ class Team(models.Model):
 class Membership(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='memberships')
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='memberships')
+    role = models.CharField(max_length=20, default='member')
     joined_at = models.DateTimeField(auto_now_add=True)
 
 class Profile(models.Model):
