@@ -22,10 +22,11 @@ def signout(request):
 
     return render(request, 'account/signout.html')
 
-
-
-
-
+# currently working on export data view
+@login_required
+def export_data(request):
+    # Implement the logic to export data as CSV
+    pass
 
 
 

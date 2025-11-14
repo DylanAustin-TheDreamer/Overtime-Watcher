@@ -7,6 +7,16 @@ if (navbarToggler && navBarLinks) {
         });
 }
 
+
+
+
+
+
+
+
+
+// Section for real-time awake duration calculation
+
 // Helper to read CSRF token from cookies (Django default)
 function getCookie(name) {
     const value = `; ${document.cookie}`;

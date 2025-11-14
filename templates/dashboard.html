@@ -31,33 +31,28 @@
     </div>
     {% endif %}
 
-    {% if messages %}
-    <div class="mb-3">
-        <ul class="messages">
-            {% for message in messages %}
-            <li class="message {{ message.tags }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
+    <!-- Confirming successful join request -->
     {% if request.GET.joined %}
     <div class="mb-3">
         <div class="message success">Joined team with code: <strong>{{ request.GET.joined }}</strong></div>
     </div>
     {% endif %}
+
     <div class="mt-4">
         <div class="dashboard-row">
-            <div class="dashboard-card">
+            <div class="dashboard-card dash-btn" id="stats-btn">
                 <h2>Statistics</h2>
             </div>
-            <div class="dashboard-card">
+            <div class="dashboard-card dash-btn" id="team-btn">
                 <h2>Team</h2>
             </div>
-            <div class="dashboard-card">
+            <div class="dashboard-card dash-btn" id="data-btn">
                 <h2>Data</h2>
             </div>
         </div>
 
+        <!-- Team Section -->
+    <div class="team-hider">
         {% if teams %}
         <div class="mt-4">
             <h2>Your Teams</h2>
@@ -121,4 +116,86 @@
         </div>
     </div>
 </div>
+
+    <!-- Data Section -->
+    <div class="data-hider">
+        <div class="mt-4">
+            <h2>Your Data</h2>
+
+            <div class="dashboard-row" style="flex-wrap: wrap; justify-content: start;">
+                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: auto; padding: 30.5px; ">
+                    <h3>Data Info</h3>
+                    <p>Here is all the data we have on file for you {{ user.username }}:</p>
+                    <br>
+                    <li>Username: {{ user.username }}</li>
+                    <li>Email: {{ user.email }}</li>
+                    <li>First Name: {% if user.first_name %}{{ user.first_name }}{% else %}Not set{% endif %}</li>
+                    <li>Last Name: {% if user.last_name %}{{ user.last_name }}{% else %}Not set{% endif %}</li>
+                    <li>Last Login: {{ user.last_login }}</li>
+                    <li>Date joined: {{ user.date_joined }}</li>
+                    <br>
+                    <h4>Profile Information:</h4>
+                    {% if user.profile %}
+                        <li>Timezone: {% if user.profile.timezone %}{{ user.profile.timezone }}{% else %}Not set{% endif %}</li>
+                        <li>Wake Time: {% if user.profile.wake_time %}{{ user.profile.wake_time }}{% else %}Not set{% endif %}</li>
+                    {% else %}
+                        <li>No profile information available.</li>
+                    {% endif %}
+                </div>
+                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: auto; padding: 30.5px; ">
+                    <h3>How we use your data</h3>
+                    <p>Here is all the data we have on file for you {{ user.username }}:</p>
+                    <br>
+                    <li>Username: {{ user.username }}</li>
+                    <li>Email: {{ user.email }}</li>
+                    <li>First Name: {% if user.first_name %}{{ user.first_name }}{% else %}Not set{% endif %}</li>
+                    <li>Last Name: {% if user.last_name %}{{ user.last_name }}{% else %}Not set{% endif %}</li>
+                    <li>Last Login: {{ user.last_login }}</li>
+                    <li>Date joined: {{ user.date_joined }}</li>
+                    <br>
+                    <h4>Profile Information:</h4>
+                    {% if user.profile %}
+                        <li>Timezone: {% if user.profile.timezone %}{{ user.profile.timezone }}{% else %}Not set{% endif %}</li>
+                        <li>Wake Time: {% if user.profile.wake_time %}{{ user.profile.wake_time }}{% else %}Not set{% endif %}</li>
+                    {% else %}
+                        <li>No profile information available.</li>
+                    {% endif %}
+                </div>
+
+                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: fit-content; padding: 28px; ">
+                    <h3>Export Data</h3>
+                    <p>You can export your data in CSV format for personal use or analysis.</p>
+                    <form method="get" action="{% url 'export_data' %}">
+                        <button type="submit" class="btn">Export CSV</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+// section for handling button clicks in the dashboard to show info
+const teamButton = document.getElementById('team-btn');
+const dataButton = document.getElementById('data-btn');
+const teamHider = document.querySelector('.team-hider');
+const dataHider = document.querySelector('.data-hider');
+
+
+    teamButton.addEventListener('click', () => {
+        dataHider.classList.remove('data-shower');
+        teamHider.classList.toggle('team-shower');
+    });
+
+
+
+    dataButton.addEventListener('click', () => {
+        teamHider.classList.remove('team-shower');
+        dataHider.classList.toggle('data-shower');
+    });
+
+</script>
 {% endblock %}

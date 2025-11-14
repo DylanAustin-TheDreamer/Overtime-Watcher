@@ -9,6 +9,7 @@ from django.dispatch import receiver
 
 User = settings.AUTH_USER_MODEL
 
+# function to generate a unique join code - we call it in join_code field default
 def make_join_code(length=6):
     # Uppercase letters + digits, avoid ambiguous chars; use secrets for better randomness
     alphabet = string.ascii_uppercase + string.digits

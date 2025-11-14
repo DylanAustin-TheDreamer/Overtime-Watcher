@@ -146,6 +146,31 @@ input[type="password"] {
     align-items: stretch; /* make children stretch to same height if height not fixed */
 }
 
+/* For hiding */
+.team-hider {
+    display: none;
+    visibility: hidden;
+}
+.data-hider {
+    display: none;
+    visibility: hidden;
+}
+.data-hider li{
+    line-height: 1.5;
+    font-size: large;
+}
+.data-shower {
+    visibility: visible;
+    display: block !important;
+}
+.team-shower {
+    visibility: visible;
+    display: block !important;
+}
+.dash-btn {
+    cursor: pointer;
+}
+/* -------------------- */
 
 /* for contact page */
 #socials a {
