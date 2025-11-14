@@ -2,11 +2,40 @@
 {% load static %}
 
 {% block content %}
+<style>
+    #team-forms{
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+        justify-content: start;
+        margin-left: -1rem;
+    }
+    #time-form{
+        display: flex;
+        overflow: hidden;
+    }
+    #data-form{
+        overflow: hidden;
+    }
+    @media (max-width: 768px) {
+        .dashboard-row {
+            flex-direction: column;
+        }
+        .dashboard-card {
+            width: 90% !important;
+        }
+        #time-form{
+            flex-direction: column;
+            overflow: hidden;
+        }
+    }
+</style>
+
 <div class="container">
     <h1>Dashboard</h1>
     <p>Welcome to your dashboard, {{ user.username }}!</p>
-    <div style="margin-bottom:1rem;">
-        <form method="post" action="{% url 'update_time' %}" style="display:flex;align-items:center;gap:8px;">
+    <div style="margin-bottom:1rem;" id="time-form">
+        <form method="post" action="{% url 'update_time' %}" style="display:flex;align-items:center;gap:8px; justify-content: start;" id="time-form">
             {% csrf_token %}
             <label for="tz-select">Your timezone</label>
             <select id="tz-select" name="timezone" class="form-control">
@@ -85,11 +114,11 @@
         {% endif %}
     </div>
 
-    <div class="mt-4">
-        <div class="dashboard-row" style="justify-content: start;">
+    <div class="mt-4 container">
+        <div class="dashboard-row" id="team-forms">
             <div>
             <h2>Make a Team</h2>
-            <div class="dashboard-card" style="width: 300px;">
+            <div class="dashboard-card" style="max-width: 300px;">
                 <form method="post" action="{% url 'create_team' %}">
                     {% csrf_token %}
                     <div class="mb-3">
@@ -102,7 +131,7 @@
             </div>
             <div>
                 <h2>Join a Team</h2>
-            <div class="dashboard-card" style="width: 300px;">
+            <div class="dashboard-card" style="max-width: 300px;">
                 <form method="post" action="{% url 'join_team' %}">
                     {% csrf_token %}
                     <div class="mb-3">
@@ -162,7 +191,7 @@
                     {% endif %}
                 </div>
 
-                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: fit-content; padding: 28px; ">
+                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: fit-content; padding: 28px;" id="data-form">
                     <h3>Export Data</h3>
                     <p>You can export your data in CSV format for personal use or analysis.</p>
                     <form method="get" action="{% url 'export_data' %}">

@@ -223,6 +223,20 @@ input[type="password"] {
     .navBarTitle a {
         font-size: x-large;
     }
+
+    form {
+    max-width: 450px;
+    gap: 5px;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
 }
 
 .members-list {
