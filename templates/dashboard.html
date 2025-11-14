@@ -83,11 +83,11 @@
         <!-- Team Section -->
     <div class="team-hider">
         {% if teams %}
-        <div class="mt-4">
+        <div class="mt-4" style="overflow: hidden;">
             <h2>Your Teams</h2>
             <div class="dashboard-row" style="flex-wrap: wrap; justify-content: start;">
             {% for team in teams %}
-            <div class="dashboard-card d-flex" id="team-{{ team.id }}" style="flex-direction: column; height: auto; width: fit-content; padding: 28px; ">
+            <div class="dashboard-card d-flex" id="team-{{ team.id }}" style="flex-direction: column; height: auto; width: 475px; padding: 28px; ">
                 <h3>{{ team.name }}</h3>
                 {% if team.created_by == user %}
                     <div style="margin-top:6px; font-size:0.95rem;">Join code: <strong>{{ team.join_code }}</strong></div>
@@ -108,6 +108,17 @@
                     </li>
                     {% endfor %}
                 </ul>
+                {% if team.created_by == user %}
+                    <form method="post" action="{% url 'delete_group' team.id %}" style="margin-top: 10px;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete Team</button>
+                    </form>
+                {% else %}
+                    <form method="post" action="{% url 'leave_group' team.id %}" style="margin-top: 10px;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-warning">Leave Team</button>
+                    </form>
+                {% endif %}
             </div>
             {% endfor %}
         </div>
@@ -152,7 +163,7 @@
             <h2>Your Data</h2>
 
             <div class="dashboard-row" style="flex-wrap: wrap; justify-content: start;">
-                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: auto; padding: 30.5px; ">
+                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: 475px; padding: 30.5px; ">
                     <h3>Data Info</h3>
                     <p>Here is all the data we have on file for you {{ user.username }}:</p>
                     <br>
@@ -178,10 +189,10 @@
                     as it helps with data collection and research, and it might just buy me some bread. But the choice will always be in your own control. That is my promise.</p>
                     <p>The website uses Django for backend development and is very secure. I will continue to prioritize your privacy and data security.</p>
                     <br>
-                    <p>Keeping Jedi safe from Sith - The open source way.</p>
+                    <p>Keeping Jedi safe from Sith - By way of the open-source.</p>
                 </div>
 
-                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: fit-content; padding: 28px;" id="data-form">
+                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; max-width: 475px; padding: 28px;" id="data-form">
                     <h3>Export Data</h3>
                     <p>You can export your data in CSV format for personal use or analysis.</p>
                     <form method="get" action="{% url 'export_data' %}">

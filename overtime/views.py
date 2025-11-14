@@ -22,11 +22,22 @@ def signout(request):
 
     return render(request, 'account/signout.html')
 
-# currently working on export data view
+
+
+
+
+
+
+# Currently working on
 @login_required
 def export_data(request):
     # Implement the logic to export data as CSV
     pass
+
+
+
+
+
 
 
 
@@ -105,3 +116,26 @@ def join_team(request):
         except Team.DoesNotExist:
             pass  # Optionally handle invalid join code here
     return render(request, 'dashboard.html')
+
+# works - Completed
+@login_required
+def delete_group(request, team_id):
+    """View to delete a team."""
+    try:
+        team = Team.objects.get(id=team_id, created_by=request.user)
+        team.delete()
+    except Team.DoesNotExist:
+        pass  # Optionally handle the case where the team does not exist or user is not authorized
+    return redirect('dashboard')
+
+# works - Completed
+@login_required
+def leave_group(request, team_id):
+    """View to leave a team."""
+    try:
+        team = Team.objects.get(id=team_id)
+        team.members.remove(request.user)
+        team.save()
+    except Team.DoesNotExist:
+        pass  # Optionally handle the case where the team does not exist
+    return redirect('dashboard')
