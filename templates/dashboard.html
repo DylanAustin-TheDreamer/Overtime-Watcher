@@ -171,24 +171,14 @@
                         <li>No profile information available.</li>
                     {% endif %}
                 </div>
-                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: auto; padding: 30.5px; ">
+                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: 475px; padding: 30.5px; ">
                     <h3>How we use your data</h3>
-                    <p>Here is all the data we have on file for you {{ user.username }}:</p>
+                    <p>we use your data to provide and improve our services. Your timezone and wake time help us deliver accurate notifications and insights. 
+                    We do not share your personal data with third parties without your consent. If you wish to opt in for studies in the future, you are more than welcome
+                    as it helps with data collection and research, and it might just buy me some bread. But the choice will always be in your own control. That is my promise.</p>
+                    <p>The website uses Django for backend development and is very secure. I will continue to prioritize your privacy and data security.</p>
                     <br>
-                    <li>Username: {{ user.username }}</li>
-                    <li>Email: {{ user.email }}</li>
-                    <li>First Name: {% if user.first_name %}{{ user.first_name }}{% else %}Not set{% endif %}</li>
-                    <li>Last Name: {% if user.last_name %}{{ user.last_name }}{% else %}Not set{% endif %}</li>
-                    <li>Last Login: {{ user.last_login }}</li>
-                    <li>Date joined: {{ user.date_joined }}</li>
-                    <br>
-                    <h4>Profile Information:</h4>
-                    {% if user.profile %}
-                        <li>Timezone: {% if user.profile.timezone %}{{ user.profile.timezone }}{% else %}Not set{% endif %}</li>
-                        <li>Wake Time: {% if user.profile.wake_time %}{{ user.profile.wake_time }}{% else %}Not set{% endif %}</li>
-                    {% else %}
-                        <li>No profile information available.</li>
-                    {% endif %}
+                    <p>Keeping Jedi safe from Sith - The open source way.</p>
                 </div>
 
                 <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: fit-content; padding: 28px;" id="data-form">
