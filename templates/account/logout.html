@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container" style="max-width:600px; margin:2rem auto; background:#fff; padding:1.5rem; border-radius:6px;" style="overflow: hidden;">
+  <h2>{% trans "Log Out" %}</h2>
+  <form method="post" action="{% url 'account_logout' %}" style="overflow: hidden;">
+    {% csrf_token %}
+    <p>{% trans "Are you sure you want to log out?" %}</p>
+    <!-- Optional: include a next parameter to redirect after logout -->
+    <input type="hidden" name="next" value="{% url 'signout' %}">
+    <button type="submit" class="btn">{% trans "Log Out" %}</button>
+  </form>
+</div>
+{% endblock %}

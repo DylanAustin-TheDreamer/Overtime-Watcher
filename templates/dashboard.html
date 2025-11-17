@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    #team-forms{
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+        justify-content: start;
+        margin-left: -1rem;
+    }
+    #time-form{
+        display: flex;
+        overflow: hidden;
+    }
+    #data-form{
+        overflow: hidden;
+    }
+
+    #profile-background{
+        background-color: rgba(0, 0, 0, 0.1); 
+        padding: 8px; 
+        display: flex; 
+        justify-content: space-between; 
+        height: 120px; 
+    }
+    @media (max-width: 768px) {
+        .dashboard-row {
+            flex-direction: column;
+        }
+        .dashboard-card {
+            width: 90% !important;
+        }
+        #time-form{
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #profile-background{
+            flex-direction: column;
+            height: auto;
+            gap: 12px;
+        }
+    }
+</style>
+
+<div class="container">
+    <h1><i class="fa-solid fa-seedling" id="seedling"></i> Dashboard</h1>
+    <p>Welcome to your dashboard, {{ user.username }}!</p>
+    <div style="margin-bottom:1rem;" id="time-form">
+        <form method="post" action="{% url 'update_time' %}" style="display:flex;align-items:center;gap:8px; justify-content: start;" id="time-form">
+            {% csrf_token %}
+            <label for="tz-select">Your timezone</label>
+            <select id="tz-select" name="timezone" class="form-control">
+                {% for label, value in zones_byGMT.items %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+            <label for="wake-account" style="margin-left:8px;">Wake time</label>
+            <input id="wake-account" name="wake_time" type="time"/>
+            <button type="submit" class="btn">Save</button>
+        </form>
+    </div>
+    <div id="profile-background">
+        <div style="justify-content: start;">
+        <p>Your current timezone: {{ user.profile.timezone|default:"Not set" }}</p>
+        <p>Your current wake time: {{ user.profile.wake_time|default:"Not set" }}</p>
+        <p>You've been awake: <span id="warning" 
+            {% if user.profile.wake_time and user.profile.timezone %}
+            data-wake-time="{{ user.profile.wake_time|date:'H:i' }}" 
+            data-timezone-offset="{{ user.profile.timezone|slice:'3:' }}"
+            {% endif %}>{{ user.profile.get_awake_duration|default:"—" }}</span></p>
+        </div>
+        <div style="display: flex; justify-content: end; line-height: 180px; width: 150px;">
+            <form method="post" action="{% url 'confirm_delete' %}" style="justify-content: end;">
+            {% csrf_token %}
+            <input type="submit" id="delete-account-btn" class="btn btn-danger" value="Delete Account"/>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirming successful join request -->
+    {% if request.GET.joined %}
+    <div class="mb-3">
+        <div class="message success">Joined team with code: <strong>{{ request.GET.joined }}</strong></div>
+    </div>
+    {% endif %}
+
+    <div class="mt-4">
+        <div class="dashboard-row">
+            <div class="dashboard-card dash-btn" id="stats-btn">
+                <h2>Statistics</h2>
+            </div>
+            <div class="dashboard-card dash-btn" id="team-btn">
+                <h2>Team</h2>
+            </div>
+            <div class="dashboard-card dash-btn" id="data-btn">
+                <h2>Data</h2>
+            </div>
+        </div>
+
+        <!-- Team Section -->
+    <div class="team-hider">
+        {% if teams %}
+        <div class="mt-4" style="overflow: hidden;">
+            <h2>Your Teams</h2>
+            <div class="dashboard-row" style="flex-wrap: wrap; justify-content: start;">
+            {% for team in teams %}
+            <div class="dashboard-card d-flex" id="team-{{ team.id }}" style="flex-direction: column; height: auto; width: 475px; padding: 28px; ">
+                <h3>{{ team.name }}</h3>
+                {% if team.created_by == user %}
+                    <div style="margin-top:6px; font-size:0.95rem;">Join code: <strong>{{ team.join_code }}</strong></div>
+                {% endif %}
+                <h4 class="mt-2">Members</h4>
+                <ul class="members-list">
+                    {% for m in team.memberships.all %}
+                    <li>
+                        <strong>{{ m.user.username }}</strong>
+                        {% if m.user.profile.wake_time and m.user.profile.timezone %}
+                        - <span id="warning" 
+                            data-wake-time="{{ m.user.profile.wake_time|date:'H:i' }}" 
+                            data-timezone-offset="{{ m.user.profile.timezone|slice:'3:' }}">{{ m.user.profile.get_awake_duration }}</span> ({{ m.user.profile.timezone }})
+                      
+                        {% else %}
+                        - <em>No wake time set</em>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% if team.created_by == user %}
+                    <form method="post" action="{% url 'delete_group' team.id %}" style="margin-top: 10px;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete Team</button>
+                    </form>
+                {% else %}
+                    <form method="post" action="{% url 'leave_group' team.id %}" style="margin-top: 10px;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-warning">Leave Team</button>
+                    </form>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    <div class="mt-4 container">
+        <div class="dashboard-row" id="team-forms">
+            <div>
+            <h2>Make a Team</h2>
+            <div class="dashboard-card" style="max-width: 300px;">
+                <form method="post" action="{% url 'create_team' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="team-name" class="form-label">Team Name</label>
+                        <input type="text" class="form-control" id="team-name" name="name" required>
+                    </div>
+                    <button type="submit" class="btn">Create Team</button>
+                </form>
+            </div>
+            </div>
+            <div>
+                <h2>Join a Team</h2>
+            <div class="dashboard-card" style="max-width: 300px;">
+                <form method="post" action="{% url 'join_team' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="team-code" class="form-label">Team Code</label>
+                        <input type="text" class="form-control" id="team-code" name="join_code" required>
+                    </div>
+                    <button type="submit" class="btn">Join Team</button>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+    <!-- Data Section -->
+    <div class="data-hider">
+        <div class="mt-4">
+            <h2>Your Data</h2>
+
+            <div class="dashboard-row" style="flex-wrap: wrap; justify-content: start;">
+                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: 475px; padding: 30.5px; ">
+                    <h3>Data Info</h3>
+                    <p>Here is all the data we have on file for you {{ user.username }}:</p>
+                    <br>
+                    <li data-user="{{ user.username }}">Username: {{ user.username }}</li>
+                    <li data-email="{{ user.email }}">Email: {{ user.email }}</li>
+                    <li data-firstName="{{ user.first_name }}">First Name: {% if user.first_name %}{{ user.first_name }}{% else %}Not set{% endif %}</li>
+                    <li data-lastName="{{ user.last_name }}">Last Name: {% if user.last_name %}{{ user.last_name }}{% else %}Not set{% endif %}</li>
+                    <li data-lastLogin="{{ user.last_login }}">Last Login: {{ user.last_login }}</li>
+                    <li data-dateJoined="{{ user.date_joined }}">Date joined: {{ user.date_joined }}</li>
+                    <br>
+                    <h4>Profile Information:</h4>
+                    {% if user.profile %}
+                        <li data-timezone="{{ user.profile.timezone }}">Timezone: {% if user.profile.timezone %}{{ user.profile.timezone }}{% else %}Not set{% endif %}</li>
+                        <li data-wakeTime="{{ user.profile.wake_time }}">Wake Time: {% if user.profile.wake_time %}{{ user.profile.wake_time }}{% else %}Not set{% endif %}</li>
+                    {% else %}
+                        <li>No profile information available.</li>
+                    {% endif %}
+                </div>
+                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: 475px; padding: 30.5px; ">
+                    <h3>How we use your data</h3>
+                    <p>we use your data to provide and improve our services. Your timezone and wake time help us deliver accurate notifications and insights. 
+                    We do not share your personal data with third parties without your consent. If you wish to opt in for studies in the future, you are more than welcome
+                    as it helps with data collection and research, and it might just buy me some bread. But the choice will always be in your own control. That is my promise.
+                    What should be identified about my statements is my transparency</p>
+                    <p>The website uses Django for backend development and is very secure. I will continue to prioritize your privacy and data security.</p>
+                    <br>
+                    <p>Keeping Jedi safe from Sith - By way of the open-source.</p>
+                </div>
+
+                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; max-width: 475px; padding: 28px;" id="data-form">
+                    <h3>Export Data</h3>
+                    <p>You can export your data in PDF format for personal use or analysis.</p>
+                        <button class="btn" id="export_btn">Export PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-hider">
+        <div class="mt-4">
+            <h2>Your Statistics</h2>
+
+            <div class="dashboard-row" style="display: flex; justify-content: start; align-items: center;">
+                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: 475px; padding: 30.5px; ">
+                    <h3>Statistics Info</h3>
+                    <p>Here are some statistics based on your usage of Overtime Watcher, {{ user.username }}:</p>
+                    <br>
+                    <li>Total logins: {{ stats.total_logins }}</li>
+                    <li>Average awake duration: {{ stats.avg_awake_duration }}</li>
+                    <li>Teams joined: {{ stats.teams_joined }}</li>
+                    <li>Overtime alerts received: {{ stats.overtime_alerts }}</li>
+                    <br>
+                    <h4>Usage Trends:</h4>
+                    <li>Most active day: {{ stats.most_active_day }}</li>
+                    <li>Peak usage hours: {{ stats.peak_usage_hours }}</li>
+                </div>
+                <div class="dashboard-card d-flex" style="flex-direction: column; height: auto; width: 475px; padding: 30.5px; ">
+                    <h3>Work in progress</h3>
+                    <p>This section is a work in progress for practicing data analytics</p>
+                    <p>More detailed statistics and visualizations will be added in future updates to help you better understand your work habits and team dynamics.</p>
+                </div>
+            </div>
+    </div>
+</div>
+
+
+
+<script>
+
+// section for handling button clicks in the dashboard to show info
+const teamButton = document.getElementById('team-btn');
+const dataButton = document.getElementById('data-btn');
+const statsButton = document.getElementById('stats-btn');
+const teamHider = document.querySelector('.team-hider');
+const dataHider = document.querySelector('.data-hider');
+const statsHider = document.querySelector('.stats-hider');
+
+
+    teamButton.addEventListener('click', () => {
+        dataHider.classList.remove('data-shower');
+        teamHider.classList.toggle('team-shower');
+        statsHider.classList.remove('stats-shower');
+    });
+
+
+
+    dataButton.addEventListener('click', () => {
+        teamHider.classList.remove('team-shower');
+        dataHider.classList.toggle('data-shower');
+        statsHider.classList.remove('stats-shower');
+    });
+
+    statsButton.addEventListener('click', () => {
+        teamHider.classList.remove('team-shower');
+        dataHider.classList.remove('data-shower');
+        statsHider.classList.toggle('stats-shower');
+    });
+
+</script>
+{% endblock %}

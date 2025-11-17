@@ -1,0 +1,16 @@
+# Overtime Watcher - robots.txt
+User-agent: *
+Disallow: /admin/
+Disallow: /accounts/
+Disallow: /dashboard/
+Disallow: /teams/
+Disallow: /update-time/
+Disallow: /export-data/
+Disallow: /delete-account/
+
+# Allow public pages
+Allow: /
+Allow: /contact/
+
+# Sitemap
+Sitemap: https://overtime-watcher-201d7bb1154f.herokuapp.com/static/sitemap.xml

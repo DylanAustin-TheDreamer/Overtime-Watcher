@@ -1,0 +1,85 @@
+# Virtual environments
+.venv/
+env/
+venv/
+.env
+env.py
+
+# Python bytecode / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Installer / pip logs
+pip-log.txt
+
+# Unit test / coverage
+htmlcov/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+/media/
+/staticfiles/
+
+# If you store uploaded files locally during dev
+media/
+
+# Do NOT ignore your app migrations (keep them committed)
+# Example: keep these lines commented so you don't accidentally ignore migrations:
+# */migrations/*.py
+# */migrations/__pycache__/
+
+# Environment / secrets
+.env
+.env.*
+instance/
+secrets.json
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.tmp
+*.log
+
+# MyPy / lint caches
+.mypy_cache/
+.pyre/
+.coverage
+
+# Node / frontend (if applicable)
+node_modules/
+
+# databases
+*.sqlite3
+*.db
+*.sqlite3-journal
+*.db-journal
+*.sqlite-journal
+*.db.sqlite3
+db.sqlite3
+.db.sqlite3

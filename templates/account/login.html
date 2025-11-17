@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container" style="max-width:600px; margin:2rem auto; background:#fff; padding:1.5rem; border-radius:6px; display: flex; flex-direction: column; flex-wrap: wrap; overflow: hidden;">
+  <h2>{% trans "Log In" %}</h2>
+  <form method="post" action="{% url 'account_login' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">{% trans "Log In" %}</button>
+  </form>
+  <br>
+  <p>
+    <a href="{% url 'account_reset_password' %}">{% trans "Forgot password?" %}</a>
+  </p>
+  <p>
+    <a href="{% url 'account_signup' %}">{% trans "Don’t have an account? Sign up" %}</a>
+  </p>
+</div>
+{% endblock %}

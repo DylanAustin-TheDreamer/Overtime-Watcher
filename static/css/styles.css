@@ -1,0 +1,324 @@
+body, html{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: rgb(228, 237, 240);
+}
+
+/* For apple icon */
+#apple {
+    color: rgb(43, 160, 53);
+    background: linear-gradient(90deg, #59cf35 0%, rgb(185, 223, 191) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+#apple:hover {
+    background: linear-gradient(90deg, #60aa60 0%, rgba(243, 243, 243, 0.582) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: ease-in-out 0.15s;
+}
+#seedling {
+    color: rgb(43, 160, 53);
+}
+
+/* Navigation Bar Styles */
+.navBar {
+    background-color: #fdb87f;
+    color: white;
+    padding: 5px;
+    border-bottom: 1px solid #c06a48;
+}
+.navBarTitle{
+    flex-grow: 1;
+}
+.navBarTitle a {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    line-height: 80px;
+    font-size: xx-large;
+    font-weight: 700;
+}
+.navBarTitle a:hover {
+    color: #f3f3f3;
+    transition: ease-in-out 0.15s;
+}
+.navBarLinks{
+    justify-content: end;
+}
+.navBarLinks nav {
+  display: flex;
+  gap: 1rem;
+}
+.navBarLinks a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 80px;
+}
+.navBarLinks a:hover {
+    color: #f3f3f3;
+    transition: ease-in-out 0.15s;
+}
+
+.dropdownNav {
+        visibility: hidden;
+        flex-direction: column;
+        transition: ease-in-out 0.35s;
+        max-height: 0;
+    }
+/* End Of Navigation Bar Styles */
+
+/* Button Styles */
+.btn{
+    background-color: #fdb87f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn:hover {
+    background-color: #e5946a;
+    transition: ease-in-out 0.15s;
+}
+/* For styling background forms on allauth */
+form {
+    width: 450px;
+    gap: 5px;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+/* Remove Chrome autofill blue background */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: #000 !important;
+}
+/* ---------------------------------------- */
+
+
+/* ---------------------------------------- */
+/* styles based on bootstrap */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+.d-flex {
+    display: flex;
+}
+.justify-content-center {
+    justify-content: center;
+}
+.mt-4 {
+    margin-top: 2rem;
+}
+.mt-2 {
+    margin-top: 0.5rem;
+}
+.flex-column {
+    flex-direction: column;
+}
+.navbar-toggler {
+    display: none;
+    border: none;
+    background-color: transparent;
+    line-height: 80px;
+}
+.navbar-toggler-icon {
+    font-size: 1.5rem;
+    color: white;
+}
+.navbar-toggler-icon:hover {
+    color: #f3f3f3;
+    transition: ease-in-out 0.15s;
+}
+/* End of bootstrap copy styles */
+/* ---------------------------------------- */
+
+
+/* Dashboard card styles: use a class instead of inline styles for consistent sizing */
+.dashboard-card {
+    box-sizing: border-box; /* include border/padding in width/height calculations */
+    border: 1px solid #333;
+    padding: 50px;
+    text-align: center;
+    width: 350px; /* fixed width so all cards match */
+    height: 150px; /* fixed height for consistent boxes */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dashboard-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    transition: box-shadow 0.05s ease-in-out;
+}
+.dashboard-row {
+    gap: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: stretch; /* make children stretch to same height if height not fixed */
+}
+
+/* For hiding */
+.team-hider {
+    display: none;
+    visibility: hidden;
+}
+.data-hider {
+    display: none;
+    visibility: hidden;
+}
+.data-hider li{
+    line-height: 1.5;
+    font-size: large;
+}
+.stats-hider {
+    display: none;
+    visibility: hidden;
+}
+.data-shower {
+    visibility: visible;
+    display: block !important;
+}
+.team-shower {
+    visibility: visible;
+    display: block !important;
+}
+.stats-shower {
+    visibility: visible;
+    display: block !important;
+}
+.dash-btn {
+    cursor: pointer;
+}
+/* -------------------- */
+
+/* for contact page */
+#socials a {
+    text-decoration: none;
+    color: #333;
+    font-size: 2rem;
+    margin-right: 15px;
+}
+#socials a:hover {
+    color: #777;
+    transition: ease-in-out 0.2s;
+}
+
+/* Responsive: stack cards on narrow screens */
+@media (max-width: 630px) {
+    .dashboard-row {
+        flex-direction: column;
+        align-items: center;
+    }
+    .dashboard-card {
+        width: 90%;      /* nearly full-width on small screens */
+        max-width: 420px;
+        height: auto;    /* let content determine height */
+        padding: 1.25rem; /* smaller padding on mobile */
+    }
+    #nav {
+        display: none;
+    }
+    .dropdownNav {
+        visibility: hidden;
+        flex-direction: column;
+        transition: ease-in-out 0.35s;
+        max-height: 0;
+    }
+    .dropdownNav-show {
+        visibility: visible;
+        flex-direction: column;
+        transition: ease-in-out 0.35s;
+        max-height: 600px;
+    }
+    .dropdownNav a{
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        line-height: 40px;
+    }
+    .navbar-toggler {
+        display: block;
+    }
+    .navBarTitle a {
+        font-size: x-large;
+    }
+
+    form {
+    max-width: 450px;
+    gap: 5px;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+}
+
+.members-list {
+    list-style: none;
+    padding-left: 0;
+}
+.members-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+.awake-value.warning,
+.badge.warning {
+    color: #a80000;
+    background-color: #ffd6d6;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+.badge {
+    display: inline-block;
+    font-size: 12px;
+    margin-left: 6px;
+}
+.alert {
+    color: #856404;
+    background-color: #fff3cd;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 550;
+}
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 550;
+}
+
+
+
+
+/* for waketime styles with JavaScript */
+#warning {
+    color: #00b947;
+    background-color: #00000009;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 550;
+}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container" style="max-width:600px; margin:2rem auto; background:#fff; padding: 5px; border-radius:6px; overflow: hidden;">
+  <h2 style="padding: 5px;">{% trans "Sign Up" %}</h2>
+  <form method="post" action="{% url 'account_signup' %}" class="container" style="margin: 0;">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn" type="submit">{% trans "Sign Up" %}</button>
+  </form>
+  <p>
+    <a href="{% url 'account_login' %}">{% trans "Already have an account? Log in" %}</a>
+  </p>
+</div>
+{% endblock %}
